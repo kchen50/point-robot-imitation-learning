@@ -165,5 +165,5 @@ if __name__ == "__main__":
     planner = RRTPlanner(xml_path=XML_PATH, steps_per_action=5, time_limit_seconds=30.0)
     plan = planner.plan_once(seed=42)
     print("Plan length:", len(plan))
-    trajs = planner.collect(num_trajectories=100, seed=123, randomize_start=True, min_plan_len=1, progress_every=1, show_progress=True)
+    trajs = planner.collect(num_trajectories=50, seed=123, randomize_start=True, min_plan_len=1, progress_every=1, show_progress=True)
     print("Collected trajectories:", len(trajs))
