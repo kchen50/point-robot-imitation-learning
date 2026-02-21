@@ -2,19 +2,36 @@ import time
 import numpy as np
 import mujoco
 
-from rrt_core import (
-    Tree,
-    KDTreeIndex,
-    get_qpos_indices,
-    get_qvel_indices,
-    get_ctrl_indices,
-    set_qpos_values,
-    set_qvel_values,
-    set_ctrl_values,
-    get_qpos_values,
-    get_qvel_values,
-    in_goal,
-)
+try:
+    # Prefer absolute import when used as a package
+    from planner.rrt_core import (
+        Tree,
+        KDTreeIndex,
+        get_qpos_indices,
+        get_qvel_indices,
+        get_ctrl_indices,
+        set_qpos_values,
+        set_qvel_values,
+        set_ctrl_values,
+        get_qpos_values,
+        get_qvel_values,
+        in_goal,
+    )
+except Exception:
+    # Fallback for running this module directly
+    from rrt_core import (
+        Tree,
+        KDTreeIndex,
+        get_qpos_indices,
+        get_qvel_indices,
+        get_ctrl_indices,
+        set_qpos_values,
+        set_qvel_values,
+        set_ctrl_values,
+        get_qpos_values,
+        get_qvel_values,
+        in_goal,
+    )
 
 # Optional progress bar (fallback to no-op if tqdm not installed)
 try:
