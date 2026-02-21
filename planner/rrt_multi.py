@@ -34,6 +34,7 @@ def _collect_worker(
     kdtree_rebuild_every=64,
     randomize_start=True,
     min_plan_len=1,
+    per_step=False,
 ):
     _limit_blas_threads()
     import numpy as np  # delayed import in worker
@@ -56,6 +57,7 @@ def _collect_worker(
         min_plan_len=min_plan_len,
         progress_every=None,
         show_progress=False,
+        per_step=per_step,
     )
 
 
@@ -70,6 +72,7 @@ def collect_parallel_chunks(
     kdtree_rebuild_every=64,
     randomize_start=True,
     min_plan_len=1,
+    per_step=False,
     verbose=True,
 ):
     if total_trajectories <= 0:
@@ -107,6 +110,7 @@ def collect_parallel_chunks(
                     kdtree_rebuild_every,
                     randomize_start,
                     min_plan_len,
+                    per_step,
                 )
             )
 
@@ -140,6 +144,7 @@ if __name__ == "__main__":
         randomize_start=True,
         min_plan_len=1,
         verbose=True,
+        per_step=True,
     )
     print("Total trajectories:", len(trajs))
 

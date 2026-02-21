@@ -104,25 +104,43 @@ class RRTPlanner:
         )
         return plan
 
-    def execute_plan(self, plan):
+    def execute_plan(self, plan, per_step=False):
         data = mujoco.MjData(self.model)
         mujoco.mj_resetData(self.model, data)
         states = []
         actions = []
-        for node in plan:
+        if per_step:
+            # Log at per-physics-step granularity: states length = total_steps + 1, actions length = total_steps
+            # initial state
             pose = get_qpos_values(data, self.qpos_idx).copy()
             vel = get_qvel_values(data, self.qvel_idx).copy()
             states.append(np.concatenate([pose, vel]))
-            actions.append(np.asarray(node.control).copy())
-            for _ in range(self.steps_per_action):
-                set_ctrl_values(data, self.ctrl_idx, node.control)
-                mujoco.mj_step(self.model, data)
-        pose = get_qpos_values(data, self.qpos_idx).copy()
-        vel = get_qvel_values(data, self.qvel_idx).copy()
-        states.append(np.concatenate([pose, vel]))
-        return np.asarray(states), np.asarray(actions)
+            for node in plan:
+                for _ in range(self.steps_per_action):
+                    set_ctrl_values(data, self.ctrl_idx, node.control)
+                    mujoco.mj_step(self.model, data)
+                    # state after step; action used during this step
+                    pose = get_qpos_values(data, self.qpos_idx).copy()
+                    vel = get_qvel_values(data, self.qvel_idx).copy()
+                    states.append(np.concatenate([pose, vel]))
+                    actions.append(np.asarray(node.control).copy())
+            return np.asarray(states), np.asarray(actions)
+        else:
+            # Original behavior: one action per plan node (applied for steps_per_action steps)
+            for node in plan:
+                pose = get_qpos_values(data, self.qpos_idx).copy()
+                vel = get_qvel_values(data, self.qvel_idx).copy()
+                states.append(np.concatenate([pose, vel])) # s_t
+                actions.append(np.asarray(node.control).copy()) # a_t
+                for _ in range(self.steps_per_action):
+                    set_ctrl_values(data, self.ctrl_idx, node.control)
+                    mujoco.mj_step(self.model, data)
+            pose = get_qpos_values(data, self.qpos_idx).copy()
+            vel = get_qvel_values(data, self.qvel_idx).copy()
+            states.append(np.concatenate([pose, vel]))
+            return np.asarray(states), np.asarray(actions)
 
-    def collect(self, num_trajectories, seed=None, randomize_start=False, start_sampler=None, goal_fn=None, min_plan_len=1, progress_every=10, show_progress=True):
+    def collect(self, num_trajectories, seed=None, randomize_start=False, start_sampler=None, goal_fn=None, min_plan_len=1, progress_every=10, show_progress=True, per_step=False):
         if goal_fn is None:
             goal_fn = in_goal
         rng = np.random.default_rng(seed)
@@ -146,7 +164,7 @@ class RRTPlanner:
                 plot_tree=False
             )
             if len(plan) >= min_plan_len:
-                states, actions = self.execute_plan(plan)
+                states, actions = self.execute_plan(plan, per_step=per_step)
                 trajectories.append({"states": states, "actions": actions})
                 successes += 1
                 if pbar is not None:
@@ -165,5 +183,7 @@ if __name__ == "__main__":
     planner = RRTPlanner(xml_path=XML_PATH, steps_per_action=5, time_limit_seconds=30.0)
     plan = planner.plan_once(seed=42)
     print("Plan length:", len(plan))
-    trajs = planner.collect(num_trajectories=50, seed=123, randomize_start=True, min_plan_len=1, progress_every=1, show_progress=True)
-    print("Collected trajectories:", len(trajs))
+    plan_batch = planner.collect(num_trajectories=3, seed=123, randomize_start=True, min_plan_len=1, progress_every=1, show_progress=True,
+        per_step=True
+    )
+    print("Collected trajectories:", len(plan_batch))
