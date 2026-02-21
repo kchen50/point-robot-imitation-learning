@@ -65,6 +65,9 @@ def main():
 
         with mujoco.viewer.launch_passive(model, data) as viewer:
             t = 0
+
+            time.sleep(1)
+            
             for a in actions_ref:
                 repeats = 1 if per_step else steps_per_action
                 for _ in range(repeats):

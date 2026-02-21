@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-02-21_16-14-17",
+  "created_at": "2026-02-21_16-42-15",
   "num_trajectories": 5,
   "shard_size": 500,
   "num_shards": 1,
@@ -18,7 +18,7 @@
   ],
   "state_dim": 4,
   "action_dim": 2,
-  "xml_path": "/home/kchen/MLAI/point-robot-imitation-learning/point_robot_nav.xml",
+  "xml_path": "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml",
   "steps_per_action": 5,
   "per_step": false,
   "time_limit_seconds": 30.0,

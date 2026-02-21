@@ -10,7 +10,7 @@ from utils.dataset import PointRobotDatasetManager
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Collect point-robot trajectories and save as a dataset")
-    default_xml = os.path.join(os.path.dirname(__file__), "point_robot_nav.xml")
+    default_xml = os.path.join(os.path.dirname(__file__), "scenes/point_robot_nav.xml")
     p.add_argument("--xml_path", type=str, default=default_xml, help="Path to MuJoCo XML")
     p.add_argument("--num_trajectories", type=int, default=5, help="Total trajectories to collect")
     p.add_argument("--per_step", action="store_true", help="Log per-physics-step (s,a) samples")

@@ -64,6 +64,10 @@ class RRTPlanner:
         mujoco.mj_step(self.model, data)
         pose = get_qpos_values(data, self.qpos_idx)
         vel = get_qvel_values(data, self.qvel_idx)
+
+        if goal_fn(pose):
+            return [] # goal already reached. degenerate query
+
         root = Tree([*pose, *vel], [0, 0])
         nn_index = KDTreeIndex(rebuild_every=self.kdtree_rebuild_every)
         nn_index.add(root)
@@ -205,7 +209,7 @@ class RRTPlanner:
 
 
 if __name__ == "__main__":
-    XML_PATH = "/home/kchen/MLAI/point-robot-imitation-learning/point_robot_nav.xml"
+    XML_PATH = "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml"
     planner = RRTPlanner(xml_path=XML_PATH, steps_per_action=5, time_limit_seconds=30.0)
     plan = planner.plan_once(seed=42)
     print("Plan length:", len(plan))

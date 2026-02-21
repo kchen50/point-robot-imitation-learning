@@ -6,7 +6,7 @@ import mujoco.viewer
 from planner.rrt_planner import RRTPlanner
 from planner.rrt_core import get_ctrl_indices, get_qpos_indices, get_qvel_indices
 
-XML = "/home/kchen/MLAI/point-robot-imitation-learning/point_robot_nav.xml"
+XML = "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml"
 STEPS = 5  # must match planner.steps_per_action
 
 # Planner + one randomized-start trajectory (node-level actions)
