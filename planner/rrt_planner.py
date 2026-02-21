@@ -126,6 +126,15 @@ class RRTPlanner:
         mujoco.mj_resetData(self.model, data)
         states = []
         actions = []
+
+        # set initial state
+        plan_start_pose = plan[0].configuration[:2]
+        plan_start_vel = plan[0].configuration[2:]
+        set_qpos_values(data, self.qpos_idx, plan_start_pose)
+        set_qvel_values(data, self.qvel_idx, plan_start_vel)
+        mujoco.mj_forward(self.model, data)
+
+        # execute plan
         if per_step:
             # Log at per-physics-step granularity: states length = total_steps + 1, actions length = total_steps
             # initial state
