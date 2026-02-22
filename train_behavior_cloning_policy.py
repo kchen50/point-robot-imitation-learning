@@ -20,7 +20,7 @@ except Exception:
 def train_BC_policy(
     policy: Policy,
     dataset_root: str,
-    num_epochs: int = 20,
+    num_epochs: int = 100,
     batch_size_train: int = 1024,
     lr: float = 1e-3,
     device: str | None = None,
@@ -38,7 +38,7 @@ def train_BC_policy(
         batch_size_train=batch_size_train,
         ratios=(0.8, 0.1, 0.1),
         seed=42,
-        num_workers_train=4,
+        num_workers_train=2,
         pin_memory=True,
         persistent_workers=True,
         full_batch_val=True,
@@ -114,4 +114,5 @@ def train_BC_policy(
 
 if __name__ == "__main__":
     policy = Policy()
-    train_BC_policy(policy, "data/2026-02-21_23-19-38-trajectories-500")
+    # train_BC_policy(policy, "data/2026-02-21_23-19-38-trajectories-500")
+    train_BC_policy(policy, "data/2026-02-21_21-20-06-trajectories-2500")

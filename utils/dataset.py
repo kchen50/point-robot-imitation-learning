@@ -155,21 +155,44 @@ class StepDataset:
         prev_total = 0 if si == 0 else self._cumulative_steps[si - 1]
         return si, idx - prev_total
 
+    # def _load_shard(self, path: str):
+    #     if path in self._cache:
+    #         # update LRU
+    #         self._cache_order.remove(path)
+    #         self._cache_order.append(path)
+    #         return self._cache[path]
+    #     data = np.load(path, allow_pickle=False, mmap_mode="r")
+    #     self._cache[path] = data
+    #     self._cache_order.append(path)
+    #     if len(self._cache_order) > self._cache_limit:
+    #         old = self._cache_order.pop(0)
+    #         try:
+    #             self._cache.pop(old, None)
+    #         except Exception:
+    #             pass
+    #     return data
+
     def _load_shard(self, path: str):
         if path in self._cache:
             # update LRU
             self._cache_order.remove(path)
             self._cache_order.append(path)
             return self._cache[path]
-        data = np.load(path, allow_pickle=False, mmap_mode="r")
+
+        # IMPORTANT: load arrays once and cache actual ndarrays, not NpzFile
+        with np.load(path, allow_pickle=False) as z:
+            data = {
+                "states": z["states"],   # ndarray in RAM
+                "actions": z["actions"], # ndarray in RAM
+            }
+
         self._cache[path] = data
         self._cache_order.append(path)
+
         if len(self._cache_order) > self._cache_limit:
             old = self._cache_order.pop(0)
-            try:
-                self._cache.pop(old, None)
-            except Exception:
-                pass
+            self._cache.pop(old, None)
+
         return data
 
     def __getitem__(self, idx: int):
