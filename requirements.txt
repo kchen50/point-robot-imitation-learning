@@ -1,0 +1,6 @@
+mujoco>=2.3.5
+numpy
+torch
+tqdm
+scipy
+matplotlib
