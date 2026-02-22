@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-02-21_21-20-06",
+  "num_trajectories": 2500,
+  "shard_size": 500,
+  "num_shards": 5,
+  "dtype_actions": "float32",
+  "replayable": true,
+  "fields": [
+    "states",
+    "actions",
+    "dones",
+    "traj_state_offsets",
+    "traj_action_offsets",
+    "traj_lengths"
+  ],
+  "shards": [
+    "part-00000.npz",
+    "part-00001.npz",
+    "part-00002.npz",
+    "part-00003.npz",
+    "part-00004.npz"
+  ],
+  "state_dim": 4,
+  "action_dim": 2,
+  "xml_path": "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml",
+  "steps_per_action": 5,
+  "per_step": false,
+  "time_limit_seconds": 30.0,
+  "kdtree_rebuild_every": 64,
+  "randomize_start": false,
+  "base_seed": 123,
+  "collection_mode": "multiprocess",
+  "num_workers": 6,
+  "chunk_size": 5,
+  "total_trajectories": 2500
+}
