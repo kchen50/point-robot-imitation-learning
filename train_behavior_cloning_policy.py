@@ -114,5 +114,10 @@ def train_BC_policy(
 
 if __name__ == "__main__":
     policy = Policy()
-    # train_BC_policy(policy, "data/2026-02-21_23-19-38-trajectories-500")
-    train_BC_policy(policy, "data/2026-02-21_21-20-06-trajectories-2500")
+    # data_path = "data/2026-02-21_21-20-06-trajectories-2500"
+    data_path = "data/2026-02-21_23-19-38-trajectories-500"
+    _, _, _, best_policy = train_BC_policy(policy, data_path)
+
+    policy.load_state_dict(best_policy)
+
+    Policy.save(policy, "./policy.pth")
