@@ -1,6 +1,6 @@
 {
-  "created_at": "2026-02-21_16-42-15",
-  "num_trajectories": 5,
+  "created_at": "2026-02-21_23-20-37",
+  "num_trajectories": 25,
   "shard_size": 500,
   "num_shards": 1,
   "dtype_actions": "float32",
@@ -23,10 +23,10 @@
   "per_step": false,
   "time_limit_seconds": 30.0,
   "kdtree_rebuild_every": 64,
-  "randomize_start": true,
-  "base_seed": 123,
-  "collection_mode": "single",
-  "num_workers": 1,
+  "randomize_start": false,
+  "base_seed": 126,
+  "collection_mode": "multiprocess",
+  "num_workers": 6,
   "chunk_size": 5,
-  "total_trajectories": 5
+  "total_trajectories": 25
 }
