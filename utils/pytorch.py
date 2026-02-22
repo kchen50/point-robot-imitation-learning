@@ -56,7 +56,7 @@ def make_step_dataloaders(
     batch_size_train: int = 1024,
     ratios: Tuple[float, float, float] = (0.8, 0.1, 0.1),
     seed: int = 42,
-    num_workers_train: int = 4,
+    num_workers_train: int = 2,
     pin_memory: bool = True,
     persistent_workers: bool = True,
     full_batch_val: bool = True,
