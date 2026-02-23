@@ -11,6 +11,8 @@ from policy.policy import Policy
 from planner.rrt_core import in_goal, get_qpos_indices, get_qvel_indices, get_ctrl_indices
 
 
+DEBUG_START_POSE = np.array([0, 0.2])
+
 def parse_args():
     p = argparse.ArgumentParser(description="Run a trained policy in MuJoCo")
     default_xml = os.path.join(os.path.dirname(__file__), "scenes", "point_robot_nav.xml")
@@ -50,7 +52,7 @@ def main():
         mujoco.mj_forward(model, data)
 
     if args.debug_start:
-        start_pose = np.array([0, 0.2])
+        start_pose = DEBUG_START_POSE
         data.qpos[qpos_idx] = start_pose
         data.qvel[qvel_idx] = 0.0
         mujoco.mj_forward(model, data)
