@@ -209,7 +209,7 @@ class RRTPlanner:
 
 
 if __name__ == "__main__":
-    XML_PATH = "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml"
+    XML_PATH = "scenes/point_robot_nav.xml"
     planner = RRTPlanner(xml_path=XML_PATH, steps_per_action=5, time_limit_seconds=30.0)
     plan = planner.plan_once(seed=42)
     print("Plan length:", len(plan))

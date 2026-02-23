@@ -227,7 +227,7 @@ def KRRT(m, d, STEPS):
 
 
 if __name__ == '__main__':
-    m = mujoco.MjModel.from_xml_path('/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml')
+    m = mujoco.MjModel.from_xml_path('scenes/point_robot_nav.xml')
     d = mujoco.MjData(m)
     ctrl_inds = get_ctrl_indices(m)
 

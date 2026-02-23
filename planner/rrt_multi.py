@@ -132,7 +132,7 @@ def collect_parallel_chunks(
 
 
 if __name__ == "__main__":
-    XML = "/home/kchen/MLAI/point-robot-imitation-learning/scenes/point_robot_nav.xml"
+    XML = "scenes/point_robot_nav.xml"
     trajs = collect_parallel_chunks(
         xml_path=XML,
         total_trajectories=50,
