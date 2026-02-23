@@ -19,7 +19,7 @@ All experiments are assumed to be run from the repository root.
 - **Run the RRT core visualization**
 
 ```bash
-python -m planner.rrt_planner
+python -m planner.rrt_core
 ```
 
 This will launch a visualization of the RRT-based motion planner that generates expert trajectories for the point robot.
