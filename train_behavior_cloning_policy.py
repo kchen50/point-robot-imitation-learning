@@ -59,53 +59,13 @@ def train_BC_policy(
     best_val_epoch = -1
     best_policy = None
     bad_epochs = 0
-    for epoch in range(num_epochs):
-        policy.train()
-        epoch_train_losses = []
-        it = 0
-        for states, actions in _tqdm(train_loader, desc=f"Epoch {epoch+1}/{num_epochs}", dynamic_ncols=True) if verbose else train_loader:
-            states = states.to(device, non_blocking=True)
-            actions = actions.to(device, non_blocking=True)
-            # Forward pass
-            actions_pred = policy(states)
-            train_loss = loss_fn(actions_pred, actions)
-            # Backward pass
-            optimizer.zero_grad(set_to_none=True)
-            train_loss.backward()
-            optimizer.step()
-            epoch_train_losses.append(train_loss.item())
-            it += 1
-        train_losses.append(sum(epoch_train_losses) / max(1, len(epoch_train_losses)))
-
-        # Validation pass
-        if val_loader is not None:
-            policy.eval()
-            with torch.no_grad():
-                epoch_val_losses = []
-                for states_val, actions_val in val_loader:
-                    states_val = states_val.to(device)
-                    actions_val = actions_val.to(device)
-                    val_actions_pred = policy(states_val)
-                    val_loss = loss_fn(val_actions_pred, actions_val)
-                    epoch_val_losses.append(val_loss.item())
-                mean_val = sum(epoch_val_losses) / max(1, len(epoch_val_losses))
-                val_losses.append(mean_val)
-                if verbose:
-                    print(f"Epoch {epoch+1}: train {train_losses[-1]:.6f} | val {mean_val:.6f}")
-                # Early stopping check
-                if mean_val + min_delta < best_val_loss:
-                    best_val_loss = mean_val
-                    best_val_epoch = epoch
-                    best_policy = copy.deepcopy(policy.state_dict())
-                    bad_epochs = 0
-                else:
-                    bad_epochs += 1
-                if patience > 0 and bad_epochs >= patience:
-                    if verbose:
-                        print(f"Early stopping at epoch {epoch+1} (best epoch {best_val_epoch+1}, best val {best_val_loss:.6f})")
-                    break
-        else:
-            val_losses.append(float('nan'))
+    
+    # TODO: Implement the behavior cloning algorithm!
+        # Data: train_loader, val_loader
+        # Model: policy
+        # Loss: loss_fn
+        # Optimizer: optimizer
+        # Metrics: train_losses, val_losses
 
     # Restore best policy if we tracked one
     if best_policy is not None:
