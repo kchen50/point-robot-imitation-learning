@@ -6,7 +6,7 @@ This repository contains starter code for the **Spring 2026 Rutgers IEEE ML/AI R
 
 - **Optional but recommended: Setup a virtual environment to manage your dependencies** 
 
-- **Clone and install dependencies**
+- **Clone and install dependencies** (into your base environment or virtual environment)
 
 ```bash
 pip install -r requirements.txt
