@@ -1,16 +1,32 @@
+<<<<<<< HEAD
 README.md
+=======
+>>>>>>> refactor
 pyproject.toml
 planner/__init__.py
 planner/rrt_core.py
 planner/rrt_multi.py
 planner/rrt_planner.py
 policy/__init__.py
+<<<<<<< HEAD
+=======
+policy/actor_critic_policy.py
+>>>>>>> refactor
 policy/policy.py
 robot_learning_toolbox.egg-info/PKG-INFO
 robot_learning_toolbox.egg-info/SOURCES.txt
 robot_learning_toolbox.egg-info/dependency_links.txt
 robot_learning_toolbox.egg-info/requires.txt
 robot_learning_toolbox.egg-info/top_level.txt
+<<<<<<< HEAD
 utils/__init__.py
 utils/dataset.py
+=======
+training/__init__.py
+training/bc_mse.py
+training/rl.py
+utils/__init__.py
+utils/dataset.py
+utils/mj_utils.py
+>>>>>>> refactor
 utils/pytorch.py

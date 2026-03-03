@@ -8,6 +8,7 @@ Requires-Dist: torch
 Requires-Dist: numpy
 Requires-Dist: mujoco
 Requires-Dist: tqdm
+<<<<<<< HEAD
 
 ## Point Robot Imitation Learning
 
@@ -68,3 +69,5 @@ By default, this script will:
 
 You can then load and deploy the trained policy with `run_policy.py` (once you are ready to test closed-loop performance).
 
+=======
+>>>>>>> refactor
