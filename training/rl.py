@@ -107,7 +107,7 @@ def update_networks(
     value = critic(state)
     advantage = reward + gamma * next_value - value
     TD_target = reward + gamma * next_value
-    print(advantage[0])
+    # print(advantage[0])
 
     critic_loss = torch.mean(torch.pow(value - TD_target.detach(), 2))
     critic_optimizer.zero_grad()
