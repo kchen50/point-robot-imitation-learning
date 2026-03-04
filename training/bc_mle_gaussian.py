@@ -37,6 +37,14 @@ def train_BC_policy(
     min_delta: float = 0.0,
     verbose: bool = True,
 ):
+    """
+    Behavior cloning via MLE (negative log-likelihood):
+        L = -E_{(s,a)~D}[ log pi_theta(a|s) ]
+
+    Assumes:
+      - your Gaussian Actor implements forward(state, action) -> log_prob(action|state)
+        and returns per-sample log_probs of shape (B,) (or something flattenable).
+    """
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     policy = policy.to(device)
@@ -53,7 +61,6 @@ def train_BC_policy(
         full_batch_test=True,
     )
 
-    loss_fn = nn.MSELoss()
     optimizer = torch.optim.Adam(policy.parameters(), lr=lr)
 
     train_losses = []
@@ -76,15 +83,23 @@ def train_BC_policy(
             if verbose
             else train_loader
         )
+
         for states, actions in loader_iter:
             states = states.to(device, non_blocking=True)
             actions = actions.to(device, non_blocking=True)
-            actions_pred = policy(states)
-            train_loss = loss_fn(actions_pred, actions)
+
+            # MLE / NLL behavior cloning loss
+            logp = policy(states, actions)  # expected (B,)
+            if logp.dim() != 1:
+                logp = logp.view(-1)
+            train_loss = (-logp).mean()
+
             optimizer.zero_grad(set_to_none=True)
             train_loss.backward()
             optimizer.step()
+
             epoch_train_losses.append(train_loss.item())
+
         train_losses.append(sum(epoch_train_losses) / max(1, len(epoch_train_losses)))
 
         if val_loader is not None:
@@ -92,18 +107,25 @@ def train_BC_policy(
             with torch.no_grad():
                 epoch_val_losses = []
                 for states_val, actions_val in val_loader:
-                    states_val = states_val.to(device)
-                    actions_val = actions_val.to(device)
-                    val_actions_pred = policy(states_val)
-                    val_loss = loss_fn(val_actions_pred, actions_val)
+                    states_val = states_val.to(device, non_blocking=True)
+                    actions_val = actions_val.to(device, non_blocking=True)
+
+                    logp_val = policy(states_val, actions_val)
+                    if logp_val.dim() != 1:
+                        logp_val = logp_val.view(-1)
+                    val_loss = (-logp_val).mean()
+
                     epoch_val_losses.append(val_loss.item())
+
                 mean_val = sum(epoch_val_losses) / max(1, len(epoch_val_losses))
                 val_losses.append(mean_val)
+
                 if verbose:
                     print(
                         f"Epoch {epoch+1}: train {train_losses[-1]:.6f} | "
                         f"val {mean_val:.6f}"
                     )
+
                 if mean_val + min_delta < best_val_loss:
                     best_val_loss = mean_val
                     best_val_epoch = epoch
@@ -111,6 +133,7 @@ def train_BC_policy(
                     bad_epochs = 0
                 else:
                     bad_epochs += 1
+
                 if patience > 0 and bad_epochs >= patience:
                     if verbose:
                         print(
@@ -125,5 +148,5 @@ def train_BC_policy(
         policy.load_state_dict(best_policy)
     return train_losses, val_losses, best_val_epoch, best_policy
 
-__all__ = ["train_BC_policy"]
 
+__all__ = ["train_BC_policy"]
